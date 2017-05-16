@@ -6,13 +6,14 @@ Paper: [Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial N
 Author: [Jun-Yan Zhu ](https://people.eecs.berkeley.edu/~junyanz/) *et al.*
 
 ## exemplar results on testset
-- horse <-> zebra
+- row 1: horse -> zebra -> reconstructed horse, row 2: zebra -> horse -> reconstructed zebra
 ![](./pics/example_horse2zebra_1.jpg)
-- apple <-> orange
+- row 1: apple -> orange -> reconstructed apple, row 2: orange -> apple -> reconstructed orange
 ![](./pics/example_apple2orange_1.jpg)
 
 # Prerequisites
 - tensorflow r1.0
+- python 2.7
 
 # Usage
 ```
