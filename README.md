@@ -6,6 +6,8 @@ Paper: [Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial N
 Author: [Jun-Yan Zhu ](https://people.eecs.berkeley.edu/~junyanz/) *et al.*
 
 ## exemplar results on testset
+- gif: horse -> zebra
+![](./pics/horse2zebra.gif)
 - row 1: horse -> zebra -> reconstructed horse, row 2: zebra -> horse -> reconstructed zebra
 ![](./pics/example_horse2zebra_1.jpg)
 - row 1: apple -> orange -> reconstructed apple, row 2: orange -> apple -> reconstructed orange
