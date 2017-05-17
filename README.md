@@ -42,3 +42,8 @@ python train.py --dataset=horse2zebra --gpu_id=0
 ```bash
 python test.py --dataset=horse2zebra
 ```
+
+## Gif2Gif
+```bash
+python gif2gif.py --gif=./pics/horse.gif --save_path=./pics/horse2zebra.gif --dataset=horse2zebra --direction=a2b
+```
