@@ -5,7 +5,7 @@ Tensorflow implementation of CycleGAN, mostly modified from https://github.com/X
 Paper: [Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networkssee](https://arxiv.org/pdf/1703.10593.pdf) 
 Author: [Jun-Yan Zhu ](https://people.eecs.berkeley.edu/~junyanz/) *et al.*
 
-## exemplar results on testset
+## Exemplar results on testset
 - gif: horse -> zebra
 ![](./pics/horse2zebra.gif)
 - row 1: horse -> zebra -> reconstructed horse, row 2: zebra -> horse -> reconstructed zebra
