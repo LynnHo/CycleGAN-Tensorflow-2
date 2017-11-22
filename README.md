@@ -1,4 +1,5 @@
 # CycleGAN
+***New: We also add a simple PyTorch implementation, see the "pytorch" folder***
 
 Tensorflow implementation of CycleGAN, mostly modified from https://github.com/XHUJOY/CycleGAN-tensorflow to a simpler version
 
@@ -19,7 +20,7 @@ Author: [Jun-Yan Zhu ](https://people.eecs.berkeley.edu/~junyanz/) *et al.*
 
 # Usage
 ```
-cd CycleGAN-Tensorflow-Simple-master
+cd CycleGAN-Tensorflow-PyTorch-Simple-master
 ```
 
 ## Download Datasets
