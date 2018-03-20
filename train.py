@@ -2,6 +2,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import image_utils as im
 import ops
 import data
 import utils
@@ -9,7 +10,6 @@ import models
 import argparse
 import numpy as np
 import tensorflow as tf
-import image_utils as im
 
 from glob import glob
 

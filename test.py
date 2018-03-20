@@ -1,12 +1,12 @@
 from __future__ import absolute_import, division, print_function
 
+import image_utils as im
 import os
 import utils
 import models
 import argparse
 import numpy as np
 import tensorflow as tf
-import image_utils as im
 
 from glob import glob
 

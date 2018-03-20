@@ -1,11 +1,11 @@
 from __future__ import absolute_import, division, print_function
 
+import image_utils as im
 import utils
 import models
 import argparse
 import numpy as np
 import tensorflow as tf
-import image_utils as im
 
 from PIL import Image
 from images2gif import writeGif
