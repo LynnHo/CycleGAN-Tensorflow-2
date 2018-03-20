@@ -3,7 +3,7 @@
 
 Tensorflow implementation of CycleGAN, mostly modified from https://github.com/XHUJOY/CycleGAN-tensorflow to a simpler version
 
-Paper: [Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networkssee](https://arxiv.org/pdf/1703.10593.pdf) 
+Paper: [Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networkssee](https://arxiv.org/pdf/1703.10593.pdf)
 Author: [Jun-Yan Zhu ](https://people.eecs.berkeley.edu/~junyanz/) *et al.*
 
 ## Exemplar results on testset
@@ -15,7 +15,7 @@ Author: [Jun-Yan Zhu ](https://people.eecs.berkeley.edu/~junyanz/) *et al.*
 ![](./pics/example_apple2orange_1.jpg)
 
 # Prerequisites
-- tensorflow r1.0
+- tensorflow r1.0+
 - python 2.7
 
 # Usage
