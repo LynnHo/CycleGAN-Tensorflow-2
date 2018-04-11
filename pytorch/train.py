@@ -67,7 +67,7 @@ gb_optimizer = torch.optim.Adam(Gb.parameters(), lr=lr, betas=(0.5, 0.999))
 
 
 """ load checkpoint """
-ckpt_dir = './checkpoints/celeba_dcgan'
+ckpt_dir = './checkpoints/horse2zebra'
 utils.mkdir(ckpt_dir)
 try:
     ckpt = utils.load_checkpoint(ckpt_dir)
