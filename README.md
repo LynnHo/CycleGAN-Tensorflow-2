@@ -1,9 +1,12 @@
+*** New ***
+
+*** 2018.04.13: We modify the codes: use the newest tensorflow 1.7 API, and remove the redundancies. ***
+*** 2017.12.22: We add a simple PyTorch implementation, see the "pytorch" folder ***
+
 # CycleGAN
-***New: We also add a simple PyTorch implementation, see the "pytorch" folder***
+Tensorflow implementation of CycleGAN.
 
-Tensorflow implementation of CycleGAN, mostly modified from https://github.com/XHUJOY/CycleGAN-tensorflow to a simpler version
-
-Paper: [Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networkssee](https://arxiv.org/pdf/1703.10593.pdf)
+Paper: [Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks](https://arxiv.org/pdf/1703.10593.pdf)
 Author: [Jun-Yan Zhu ](https://people.eecs.berkeley.edu/~junyanz/) *et al.*
 
 ## Exemplar results on testset
@@ -15,12 +18,12 @@ Author: [Jun-Yan Zhu ](https://people.eecs.berkeley.edu/~junyanz/) *et al.*
 ![](./pics/example_apple2orange_1.jpg)
 
 # Prerequisites
-- tensorflow r1.0+
+- tensorflow r1.7
 - python 2.7
 
 # Usage
 ```
-cd CycleGAN-Tensorflow-PyTorch-Simple-master
+cd CycleGAN-Tensorflow-PyTorch-master
 ```
 
 ## Download Datasets
@@ -36,15 +39,10 @@ sh ./download_dataset.sh apple2orange
 
 ## Train Example
 ```bash
-python train.py --dataset=horse2zebra --gpu_id=0
+CUDA_VISIBLE_DEVICES=0 python train.py --dataset=horse2zebra
 ```
 
 ## Test Example
 ```bash
-python test.py --dataset=horse2zebra
-```
-
-## Gif2Gif
-```bash
-python gif2gif.py --gif=./pics/horse.gif --save_path=./pics/horse2zebra.gif --dataset=horse2zebra --direction=a2b
+CUDA_VISIBLE_DEVICES=0 python test.py --dataset=horse2zebra
 ```
