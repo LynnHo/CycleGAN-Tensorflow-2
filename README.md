@@ -1,8 +1,14 @@
+***Recommendation***
+
+- Our GAN based work for facial attribute editing - https://github.com/LynnHo/AttGAN-Tensorflow.
+
+---
+
 ***New***
 
-***2018.04.13: We modify the codes: use the newest tensorflow 1.7 API, and remove the redundancies.***
+ - 2018.04.13: We modify the codes: use the newest tensorflow 1.7 API, and remove the redundancies.
 
-***2017.12.22: We add a simple PyTorch implementation, see the "pytorch" folder***
+ - 2017.12.22: We add a simple PyTorch implementation, see the "pytorch" folder.
 
 # CycleGAN
 Tensorflow implementation of CycleGAN.
