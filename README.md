@@ -1,3 +1,9 @@
+***Changes from LynnHo/CycleGAN-Tensorflow-PyTorch***
+
+-Added creation of an empty graph.pb when training a new model
+
+-Added freeze.py to combine trained .ckpt files into a complete GrafDef file called frozen_graph.pb in the same directory
+
 ***Recommendation***
 
 - Our GAN based work for facial attribute editing - https://github.com/LynnHo/AttGAN-Tensorflow.
