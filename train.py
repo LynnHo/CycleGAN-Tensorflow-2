@@ -127,6 +127,10 @@ utils.mkdir(ckpt_dir)
 try:
     utils.load_checkpoint(ckpt_dir, sess)
 except:
+    # Save a graph definition (once)
+    tf.train.write_graph(sess.graph.as_graph_def(), "", './outputs/checkpoints/graph.pb' + dataset)
+    
+    # Weights initialization
     sess.run(tf.global_variables_initializer())
 
 '''train'''
