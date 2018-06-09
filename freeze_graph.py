@@ -51,7 +51,7 @@ def freeze_graph(model_dir, output_node_names):
             output_node_names.split(",") # The output node names are used to select the usefull nodes
         ) 
 		
-		# fix nodes
+	# fix nodes
         for node in output_graph_def.node:
           if node.op == 'RefSwitch':
             node.op = 'Switch'
@@ -61,6 +61,8 @@ def freeze_graph(model_dir, output_node_names):
           elif node.op == 'AssignSub':
             node.op = 'Sub'
             if 'use_locking' in node.attr: del node.attr['use_locking']
+          if "dilations" in node.attr: del node.attr["dilations"]
+          if "index_type" in node.attr: del node.attr["index_type"]
 
         # Finally we serialize and dump the output graph to the filesystem
         with tf.gfile.GFile(output_graph, "wb") as f:
