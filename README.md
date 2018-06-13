@@ -1,3 +1,5 @@
+# For use in https://github.com/andrewginns/MSc-Project
+
 ***Changes from LynnHo/CycleGAN-Tensorflow-PyTorch***
 
 -Added creation of an empty graph.pb when training a new model
