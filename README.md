@@ -2,21 +2,9 @@
 
 ***Changes from LynnHo/CycleGAN-Tensorflow-PyTorch***
 
--Added creation of an empty graph.pb when training a new model
+-Added creation of an GrafDef proto called 'graph.pb' when training a new model
 
--Added freeze.py to combine trained .ckpt files into a complete GrafDef file called frozen_graph.pb in the same directory
-
-***Recommendation***
-
-- Our GAN based work for facial attribute editing - https://github.com/LynnHo/AttGAN-Tensorflow.
-
----
-
-***New***
-
- - 2018.04.13: We modify the codes: use the newest tensorflow 1.7 API, and remove the redundancies.
-
- - 2017.12.22: We add a simple PyTorch implementation, see the "pytorch" folder.
+-Input and output nodes named
 
 # CycleGAN
 Tensorflow implementation of CycleGAN.
