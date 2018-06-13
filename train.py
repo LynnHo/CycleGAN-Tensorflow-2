@@ -40,8 +40,8 @@ discriminator_a = partial(models.discriminator, scope='a')
 discriminator_b = partial(models.discriminator, scope='b')
 
 # operations
-a_real = tf.placeholder(tf.float32, shape=[None, crop_size, crop_size, 3])
-b_real = tf.placeholder(tf.float32, shape=[None, crop_size, crop_size, 3])
+a_real = tf.placeholder(tf.float32, shape=[None, crop_size, crop_size, 3], name="inputA")
+b_real = tf.placeholder(tf.float32, shape=[None, crop_size, crop_size, 3], name="inputB")
 a2b_sample = tf.placeholder(tf.float32, shape=[None, crop_size, crop_size, 3])
 b2a_sample = tf.placeholder(tf.float32, shape=[None, crop_size, crop_size, 3])
 

@@ -50,6 +50,6 @@ def generator(img, scope, dim=64, train=True):
         net = deconv_bn_relu(net, dim * 2, 3, 2)
         net = deconv_bn_relu(net, dim, 3, 2)
         net = conv(net, 3, 7, 1)
-        net = tf.nn.tanh(net)
+        net = tf.nn.tanh(net, name="output_image")
 
         return net
