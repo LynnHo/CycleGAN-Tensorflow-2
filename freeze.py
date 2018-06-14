@@ -67,13 +67,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Prune and freeze weights from checkpoints into production models')
     parser.add_argument("--checkpoint_path", 
-                        default='testing',
+                        default='./outputs/checkpoints/summer2winter_yosemite',
                         type=str, help="Path to checkpoint files")
     parser.add_argument("--output_nodes", 
                         default='a2b_generator/output_image',
                         type=str, help="Names of output node, comma seperated")
     parser.add_argument("--output_graph", 
-                        default='frozen-graph.pb',
+                        default='/tmp/frozen-graph.pb',
                         type=str, help="Output graph filename")
     parser.add_argument("--rename_outputs",
                         default=None,
