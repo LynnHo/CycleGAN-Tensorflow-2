@@ -1,10 +1,14 @@
 # For use in https://github.com/andrewginns/MSc-Project
 
+### Trained models available in releases https://github.com/andrewginns/CycleGAN-Tensorflow-PyTorch/releases
+
 ***Changes from LynnHo/CycleGAN-Tensorflow-PyTorch***
 
 -Added creation of an GrafDef proto called 'graph.pb' when training a new model
 
 -Input and output nodes named
+
+-PyTorch code removed --> Name preserved for traceability
 
 # CycleGAN
 Tensorflow implementation of CycleGAN.
