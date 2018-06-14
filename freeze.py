@@ -1,80 +1,42 @@
-"""Imports a model metagraph and checkpoint file, converts the variables to constants
-and exports the model as a graphdef protobuf
-"""
-# MIT License
-# 
-# Copyright (c) 2016 David Sandberg
-# 
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-# 
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-# 
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+import os, argparse
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
-from tensorflow.python.framework import graph_util
 import tensorflow as tf
-import argparse
-import os
-import sys
-from six.moves import xrange  # @UnresolvedImport
+from tensorflow.python.framework import graph_util
 
-def main(args):
-    with tf.Graph().as_default():
-        with tf.Session() as sess:
-            # Load the model metagraph and checkpoint
-            print('Model directory: %s' % args.model_dir)
-            meta_file, ckpt_file = get_model_filenames(os.path.expanduser(args.model_dir))
-            
-            print('Metagraph file: %s' % meta_file)
-            print('Checkpoint file: %s' % ckpt_file)
+dir = os.path.dirname(os.path.realpath(__file__))
 
-            model_dir_exp = os.path.expanduser(args.model_dir)
-            saver = tf.train.import_meta_graph(os.path.join(model_dir_exp, meta_file), clear_devices=True)
-            tf.get_default_session().run(tf.global_variables_initializer())
-            tf.get_default_session().run(tf.local_variables_initializer())
-            saver.restore(tf.get_default_session(), os.path.join(model_dir_exp, ckpt_file))
-            
-            # Retrieve the protobuf graph definition and fix the batch norm nodes
-            input_graph_def = sess.graph.as_graph_def()
-            
-            # Freeze the graph def
-            output_graph_def = freeze_graph_def(sess, input_graph_def, 'a2b_generator/output_image')
+# Modified from https://gist.github.com/moodoki/e37a85fb0258b045c005ca3db9cbc7f6
 
-        # Serialize and dump the output graph to the filesystem
-        with tf.gfile.GFile(args.output_file, 'wb') as f:
-            f.write(output_graph_def.SerializeToString())
-        print("%d ops in the final graph: %s" % (len(output_graph_def.node), args.output_file))
+def freeze_graph(model_folder, output_nodes='a2b_generator/output_image', 
+                 output_filename='frozen-graph.pb', 
+                 rename_outputs=None):
 
-def get_model_filenames(model_dir):
-    files = os.listdir(model_dir)
-    meta_files = [s for s in files if s.endswith('.meta')]
-    if len(meta_files)==0:
-        raise ValueError('No meta file found in the model directory (%s)' % model_dir)
-    elif len(meta_files)>1:
-        raise ValueError('There should not be more than one meta file in the model directory (%s)' % model_dir)
-    meta_file = meta_files[0]
-    ckpt = tf.train.get_checkpoint_state(model_dir)
-    if ckpt and ckpt.model_checkpoint_path:
-        ckpt_file = os.path.basename(ckpt.model_checkpoint_path)
-    return meta_file, ckpt_file
-        
-def freeze_graph_def(sess, input_graph_def, output_node_names):
+    #Load checkpoint 
+    checkpoint = tf.train.get_checkpoint_state(model_folder)
+    input_checkpoint = checkpoint.model_checkpoint_path
+    
+    output_graph = output_filename
+
+    #Devices should be cleared to allow Tensorflow to control placement of 
+    #graph when loading on different machines
+    saver = tf.train.import_meta_graph(input_checkpoint + '.meta', 
+                                       clear_devices=True)
+
+    graph = tf.get_default_graph()
+
+    onames = output_nodes.split(',')
+
+    #https://stackoverflow.com/a/34399966/4190475
+    if rename_outputs is not None:
+        nnames = rename_outputs.split(',')
+        with graph.as_default():
+            for o, n in zip(onames, nnames):
+                _out = tf.identity(graph.get_tensor_by_name(o+':0'), name=n)
+            onames=nnames
+
+    input_graph_def = graph.as_graph_def()
+
+    # fix batch norm nodes
     for node in input_graph_def.node:
         if node.op == 'RefSwitch':
             node.op = 'Switch'
@@ -84,33 +46,40 @@ def freeze_graph_def(sess, input_graph_def, output_node_names):
         elif node.op == 'AssignSub':
             node.op = 'Sub'
             if 'use_locking' in node.attr: del node.attr['use_locking']
-        elif node.op == 'AssignAdd':
-            node.op = 'Add'
-            if 'use_locking' in node.attr: del node.attr['use_locking']
-    
-    # Get the list of important nodes
-    whitelist_names = []
-    for node in input_graph_def.node:
-        if (node.name.startswith('InceptionResnet') or node.name.startswith('embeddings') or 
-                node.name.startswith('image_batch') or node.name.startswith('label_batch') or
-                node.name.startswith('phase_train') or node.name.startswith('Logits')):
-            whitelist_names.append(node.name)
 
-    # Replace all the variables in the graph with constants of the same values
-    output_graph_def = graph_util.convert_variables_to_constants(
-        sess, input_graph_def, output_node_names.split(","),
-        variable_names_whitelist=whitelist_names)
-    return output_graph_def
-  
-def parse_arguments(argv):
-    parser = argparse.ArgumentParser()
-    
-    parser.add_argument('model_dir', type=str, 
-        help='Directory containing the metagraph (.meta) file and the checkpoint (ckpt) file containing model parameters')
-    parser.add_argument('output_file', type=str, 
-        help='Filename for the exported graphdef protobuf (.pb)')
-    return parser.parse_args(argv)
+    with tf.Session(graph=graph) as sess:
+        saver.restore(sess, input_checkpoint)
+
+        # In production, graph weights no longer need to be updated
+        # graph_util provides utility to change all variables to constants
+        output_graph_def = graph_util.convert_variables_to_constants(
+            sess, input_graph_def, 
+            onames # unrelated nodes will be discarded
+        ) 
+
+        # Serialize and write to file
+        with tf.gfile.GFile(output_graph, "wb") as f:
+            f.write(output_graph_def.SerializeToString())
+        print("%d ops in the final graph." % len(output_graph_def.node))
+
 
 if __name__ == '__main__':
-    main(parse_arguments(sys.argv[1:]))
+    parser = argparse.ArgumentParser(
+        description='Prune and freeze weights from checkpoints into production models')
+    parser.add_argument("--checkpoint_path", 
+                        default='testing',
+                        type=str, help="Path to checkpoint files")
+    parser.add_argument("--output_nodes", 
+                        default='a2b_generator/output_image',
+                        type=str, help="Names of output node, comma seperated")
+    parser.add_argument("--output_graph", 
+                        default='frozen-graph.pb',
+                        type=str, help="Output graph filename")
+    parser.add_argument("--rename_outputs",
+                        default=None,
+                        type=str, help="Rename output nodes for better \
+                        readability in production graph, to be specified in \
+                        the same order as output_nodes")
+    args = parser.parse_args()
 
+freeze_graph(args.checkpoint_path, args.output_nodes, args.output_graph, args.rename_outputs)
