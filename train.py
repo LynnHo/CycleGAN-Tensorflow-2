@@ -178,7 +178,7 @@ try:
             save_dir = './outputs/sample_images_while_training/' + dataset
             utils.mkdir(save_dir)
             im.imwrite(im.immerge(sample_opt, 2, 3), '%s/Epoch_(%d)_(%dof%d).jpg' % (save_dir, epoch, it_epoch, batch_epoch))
-except:
+except KeyboardInterrupt as e:
     save_path = saver.save(sess, '%s/Epoch_(%d)_(%dof%d).ckpt' % (ckpt_dir, epoch, it_epoch, batch_epoch))
     print('Model saved in file: % s' % save_path)
     sess.close()

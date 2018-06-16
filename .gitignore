@@ -2740,3 +2740,11 @@ datasets/summer2winter_yosemite/testA/2010-10-05 19:08:31.jpg
 datasets/summer2winter_yosemite/testA/2010-10-05 13:45:11.jpg
 datasets/summer2winter_yosemite/testA/2010-09-07 12:23:20.jpg
 download_dataset.sh
+.DS_Store
+*.jpg
+*.xml
+*.iml
+*.index
+*.meta
+*.data-00000-of-00001
+outputs/checkpoints/summer2winter_yosemite/checkpoint
