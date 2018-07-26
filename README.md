@@ -1,14 +1,14 @@
-***Recommendation***
+# For use in https://github.com/andrewginns/MSc-Project
 
-- Our GAN based work for facial attribute editing - https://github.com/LynnHo/AttGAN-Tensorflow.
+### Trained models available in releases https://github.com/andrewginns/CycleGAN-Tensorflow-PyTorch/releases
 
----
+***Changes from LynnHo/CycleGAN-Tensorflow-PyTorch***
 
-***New***
+-Added creation of an GrafDef proto called 'graph.pb' when training a new model
 
- - 2018.04.13: We modify the codes: use the newest tensorflow 1.7 API, and remove the redundancies.
+-Input and output nodes named
 
- - 2017.12.22: We add a simple PyTorch implementation, see the "pytorch" folder.
+-PyTorch code removed --> Name preserved for traceability
 
 # CycleGAN
 Tensorflow implementation of CycleGAN.

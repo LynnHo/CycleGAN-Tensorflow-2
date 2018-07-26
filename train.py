@@ -40,8 +40,8 @@ discriminator_a = partial(models.discriminator, scope='a')
 discriminator_b = partial(models.discriminator, scope='b')
 
 # operations
-a_real = tf.placeholder(tf.float32, shape=[None, crop_size, crop_size, 3])
-b_real = tf.placeholder(tf.float32, shape=[None, crop_size, crop_size, 3])
+a_real = tf.placeholder(tf.float32, shape=[None, crop_size, crop_size, 3], name="inputA")
+b_real = tf.placeholder(tf.float32, shape=[None, crop_size, crop_size, 3], name="inputB")
 a2b_sample = tf.placeholder(tf.float32, shape=[None, crop_size, crop_size, 3])
 b2a_sample = tf.placeholder(tf.float32, shape=[None, crop_size, crop_size, 3])
 
@@ -127,6 +127,10 @@ utils.mkdir(ckpt_dir)
 try:
     utils.load_checkpoint(ckpt_dir, sess)
 except:
+    # Save a graph definition (once)
+    tf.train.write_graph(sess.graph.as_graph_def(), "", './outputs/checkpoints/' + dataset + '/graph.pb')
+    
+    # Weights initialization
     sess.run(tf.global_variables_initializer())
 
 '''train'''
@@ -174,7 +178,7 @@ try:
             save_dir = './outputs/sample_images_while_training/' + dataset
             utils.mkdir(save_dir)
             im.imwrite(im.immerge(sample_opt, 2, 3), '%s/Epoch_(%d)_(%dof%d).jpg' % (save_dir, epoch, it_epoch, batch_epoch))
-except:
+except KeyboardInterrupt as e:
     save_path = saver.save(sess, '%s/Epoch_(%d)_(%dof%d).ckpt' % (ckpt_dir, epoch, it_epoch, batch_epoch))
     print('Model saved in file: % s' % save_path)
     sess.close()

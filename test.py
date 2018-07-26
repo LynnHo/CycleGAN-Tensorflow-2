@@ -34,7 +34,7 @@ with tf.Session() as sess:
     # retore
     try:
         ckpt_path = utils.load_checkpoint('./outputs/checkpoints/' + dataset, sess)
-    except:
+    except IOError as e:
         raise Exception('No checkpoint!')
 
     # test
