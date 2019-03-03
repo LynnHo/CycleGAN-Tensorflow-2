@@ -4,12 +4,12 @@
 
 # Usage
 ```
-cd CycleGAN-Tensorflow-PyTorch-Simple-master/pytroch
+cd CycleGAN-Tensorflow-PyTorch-master/pytroch
 
 python train.py
 ```
 
-***You can modify some arguments such as gpu_id at the beginning of the code.***
+*You can modify some arguments such as gpu_id at the beginning of the code.*
 
 ## Download Datasets
-See "CycleGAN-Tensorflow-PyTorch-Simple-master/README.md"
+See [CycleGAN-Tensorflow-PyTorch/README.md](../README.md)
