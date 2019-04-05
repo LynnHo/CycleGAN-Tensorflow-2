@@ -1,55 +1,59 @@
 ***Recommendation***
 
-- Our GAN based work for facial attribute editing - https://github.com/LynnHo/AttGAN-Tensorflow.
-
----
+- Our GAN based work for facial attribute editing - [AttGAN](https://github.com/LynnHo/AttGAN-Tensorflow).
 
 ***New***
 
- - 2018.04.13: We modify the codes: use the newest tensorflow 1.7 API, and remove the redundancies.
+- We re-implement CycleGAN by **TensorFlow 2.0 Alpha**! The old versions are here: [v1](https://github.com/LynnHo/CycleGAN-Tensorflow-PyTorch/tree/v1), [v0](https://github.com/LynnHo/CycleGAN-Tensorflow-PyTorch/tree/v0).
 
- - 2017.12.22: We add a simple PyTorch implementation, see the "pytorch" folder.
+---
 
-# CycleGAN
-Tensorflow implementation of CycleGAN.
+# <p align="center"> CycleGAN </p>
+
+Tensorflow 2 implementation of CycleGAN.
 
 Paper: [Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks](https://arxiv.org/pdf/1703.10593.pdf)
+
 Author: [Jun-Yan Zhu ](https://people.eecs.berkeley.edu/~junyanz/) *et al.*
 
-## Exemplar results on testset
-- gif: horse -> zebra
-![](./pics/horse2zebra.gif)
-- row 1: horse -> zebra -> reconstructed horse, row 2: zebra -> horse -> reconstructed zebra
-![](./pics/example_horse2zebra_1.jpg)
-- row 1: apple -> orange -> reconstructed apple, row 2: orange -> apple -> reconstructed orange
-![](./pics/example_apple2orange_1.jpg)
+## Exemplar results
 
-# Prerequisites
-- tensorflow r1.7
-- python 2.7
+- gif: horse -> zebra
+
+<p align="center"> <img src="./pics/horse2zebra.gif" /> </p>
+
+- row 1: horse -> zebra -> reconstructed horse, row 2: zebra -> horse -> reconstructed zebra
+
+<p align="center"> <img src="./pics/example_horse2zebra_1.jpg" /> </p>
+
+- row 1: apple -> orange -> reconstructed apple, row 2: orange -> apple -> reconstructed orange
+
+<p align="center"> <img src="./pics/example_apple2orange_1.jpg" /> </p>
 
 # Usage
-```
-cd CycleGAN-Tensorflow-PyTorch-master
-```
 
-## Download Datasets
-- Download the horse2zebra dataset:
-```bash
-sh ./download_dataset.sh horse2zebra
-```
-- Download the apple2orange dataset:
-```bash
-sh ./download_dataset.sh apple2orange
-```
-- See download_dataset.sh for more datasets
+- Prerequisites
+    - TensorFlow 2.0 Alpha
+    - Python 3.6
 
-## Train Example
+- Dataset
+
+    - Download the horse2zebra dataset:
+    ```bash
+    sh ./download_dataset.sh horse2zebra
+    ```
+    - Download the apple2orange dataset:
+    ```bash
+    sh ./download_dataset.sh apple2orange
+    ```
+    - See download_dataset.sh for more datasets
+
+- Example of training
 ```bash
 CUDA_VISIBLE_DEVICES=0 python train.py --dataset=horse2zebra
 ```
 
-## Test Example
+- Example of training
 ```bash
 CUDA_VISIBLE_DEVICES=0 python test.py --dataset=horse2zebra
 ```
