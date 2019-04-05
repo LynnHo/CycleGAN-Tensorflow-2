@@ -6,21 +6,21 @@
 
 - We re-implement CycleGAN by **TensorFlow 2.0 Alpha**! The old versions are here: [v1](https://github.com/LynnHo/CycleGAN-Tensorflow-PyTorch/tree/v1), [v0](https://github.com/LynnHo/CycleGAN-Tensorflow-PyTorch/tree/v0).
 
----
+<hr style="height:1px" />
+
+<p align="center"><img src="./pics/horse2zebra.gif" /> </p>
+
+<hr style="height:1px" />
 
 # <p align="center"> CycleGAN </p>
 
-Tensorflow 2 implementation of CycleGAN.
+TensorFlow 2 implementation of CycleGAN.
 
 Paper: [Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks](https://arxiv.org/pdf/1703.10593.pdf)
 
 Author: [Jun-Yan Zhu ](https://people.eecs.berkeley.edu/~junyanz/) *et al.*
 
 ## Exemplar results
-
-- gif: horse -> zebra
-
-<p align="center"> <img src="./pics/horse2zebra.gif" /> </p>
 
 - row 1: horse -> zebra -> reconstructed horse, row 2: zebra -> horse -> reconstructed zebra
 
@@ -35,6 +35,7 @@ Author: [Jun-Yan Zhu ](https://people.eecs.berkeley.edu/~junyanz/) *et al.*
 - Prerequisites
     - TensorFlow 2.0 Alpha
     - Python 3.6
+    - `pip install --upgrade tb-nightly` (if you meet "tf.summary.histogram fails with TypeError")
 
 - Dataset
 
