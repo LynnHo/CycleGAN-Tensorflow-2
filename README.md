@@ -8,7 +8,7 @@
 
 <hr style="height:1px" />
 
-<p align="center"><img src="./pics/horse2zebra.gif" /> </p>
+<p align="center"> <img src="./pics/horse2zebra.gif" /> </p>
 
 <hr style="height:1px" />
 
