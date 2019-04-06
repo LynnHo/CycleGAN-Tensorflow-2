@@ -57,24 +57,22 @@ Author: [Jun-Yan Zhu ](https://people.eecs.berkeley.edu/~junyanz/) *et al.*
         sh ./download_dataset.sh horse2zebra
         ```
 
-
-
     - See [download_dataset.sh](./download_dataset.sh) for more datasets
 
 - Example of training
 
     ```console
-    CUDA_VISIBLE_DEVICES=0 python train.py --dataset horse2zebra
+    CUDA_VISIBLE_DEVICES=0 python train.py --dataset summer2winter_yosemite
     ```
 
     - tensorboard for loss visualization
 
         ```console
-        tensorboard --logdir ./output/horse2zebra/summaries --port 6006
+        tensorboard --logdir ./output/summer2winter_yosemite/summaries --port 6006
         ```
 
 - Example of testing
 
     ```console
-    CUDA_VISIBLE_DEVICES=0 python test.py --experiment_dir ./output/horse2zebra
+    CUDA_VISIBLE_DEVICES=0 python test.py --experiment_dir ./output/summer2winter_yosemite
     ```
