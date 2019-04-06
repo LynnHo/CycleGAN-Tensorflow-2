@@ -8,11 +8,11 @@
 
 <hr style="height:1px" />
 
-<p align="center"> <img src="./pics/horse2zebra.gif" /> </p>
+<p align="center"> <img src="./pics/horse2zebra.gif" width="100%" /> </p>
 
 <hr style="height:1px" />
 
-# <p align="center"> CycleGAN </p>
+# <p align="center"> CycleGAN - Tensorflow 2 </p>
 
 Tensorflow 2 implementation of CycleGAN.
 
@@ -22,17 +22,23 @@ Author: [Jun-Yan Zhu ](https://people.eecs.berkeley.edu/~junyanz/) *et al.*
 
 ## Exemplar results
 
-- row 1: summer -> winter -> reconstructed summer, row 2: winter -> summer -> reconstructed winter
+### summer2winter
 
-<p align="center"> <img src="./pics/summer2winter.jpg" /> </p>
+row 1: summer -> winter -> reconstructed summer, row 2: winter -> summer -> reconstructed winter
 
-- row 1: horse -> zebra -> reconstructed horse, row 2: zebra -> horse -> reconstructed zebra
+<p align="center"> <img src="./pics/summer2winter.jpg" width="100%" /> </p>
 
-<p align="center"> <img src="./pics/horse2zebra.jpg" /> </p>
+### horse2zebra
 
-- row 1: apple -> orange -> reconstructed apple, row 2: orange -> apple -> reconstructed orange
+row 1: horse -> zebra -> reconstructed horse, row 2: zebra -> horse -> reconstructed zebra
 
-<p align="center"> <img src="./pics/apple2orange.jpg" /> </p>
+<p align="center"> <img src="./pics/horse2zebra.jpg" width="100%" /> </p>
+
+### apple2orange
+
+row 1: apple -> orange -> reconstructed apple, row 2: orange -> apple -> reconstructed orange
+
+<p align="center"> <img src="./pics/apple2orange.jpg" width="100%" /> </p>
 
 # Usage
 
