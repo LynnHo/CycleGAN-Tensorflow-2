@@ -51,19 +51,19 @@ row 1: apple -> orange -> reconstructed apple, row 2: orange -> apple -> reconst
 
 - Dataset
 
-    - Download the summer2winter dataset
+    - download the summer2winter dataset
 
         ```console
         sh ./download_dataset.sh summer2winter_yosemite
         ```
 
-    - Download the horse2zebra dataset
+    - download the horse2zebra dataset
 
         ```console
         sh ./download_dataset.sh horse2zebra
         ```
 
-    - See [download_dataset.sh](./download_dataset.sh) for more datasets
+    - see [download_dataset.sh](./download_dataset.sh) for more datasets
 
 - Example of training
 
