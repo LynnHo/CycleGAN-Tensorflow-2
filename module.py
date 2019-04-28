@@ -91,7 +91,7 @@ def ResnetGenerator(input_shape=(256, 256, 3),
 def ConvDiscriminator(input_shape=(256, 256, 3),
                       dim=64,
                       n_downsamplings=3,
-                      norm='instance_norm'):
+                      norm='batch_norm'):
     dim_ = dim
     Norm = _get_norm_layer(norm)
 
