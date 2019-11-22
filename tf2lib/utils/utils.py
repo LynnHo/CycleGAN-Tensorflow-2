@@ -22,6 +22,14 @@ class Checkpoint:
         else:
             return self.manager.save(checkpoint_number=file_prefix_or_checkpoint_number)
 
+    def __getattr__(self, attr):
+        if hasattr(self.checkpoint, attr):
+            return getattr(self.checkpoint, attr)
+        elif hasattr(self.manager, attr):
+            return getattr(self.manager, attr)
+        else:
+            self.__getattribute__(attr)  # this will raise an exception
+
 
 def summary(name_data_dict,
             step=None,
@@ -33,6 +41,7 @@ def summary(name_data_dict,
     Examples
     --------
     >>> summary({'a': data_a, 'b': data_b})
+
     """
     def _summary(name, data):
         if data.shape == ():
