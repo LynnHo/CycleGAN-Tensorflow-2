@@ -15,19 +15,7 @@ def _get_norm_layer(norm):
     elif norm == 'instance_norm':
         return tfa.layers.InstanceNormalization
     elif norm == 'layer_norm':
-        return tfa.layers.LayerNormalization
-
-
-class Pad(keras.layers.Layer):
-
-    def __init__(self, paddings, mode='CONSTANT', constant_values=0, **kwargs):
-        super(Pad, self).__init__(**kwargs)
-        self.paddings = paddings
-        self.mode = mode
-        self.constant_values = constant_values
-
-    def call(self, inputs):
-        return tf.pad(inputs, self.paddings, mode=self.mode, constant_values=self.constant_values)
+        return keras.layers.LayerNormalization
 
 
 def ResnetGenerator(input_shape=(256, 256, 3),
@@ -42,12 +30,12 @@ def ResnetGenerator(input_shape=(256, 256, 3),
         dim = x.shape[-1]
         h = x
 
-        h = Pad([[0, 0], [1, 1], [1, 1], [0, 0]], mode='REFLECT')(h)
+        h = tf.pad(h, [[0, 0], [1, 1], [1, 1], [0, 0]], mode='REFLECT')
         h = keras.layers.Conv2D(dim, 3, padding='valid', use_bias=False)(h)
         h = Norm()(h)
-        h = keras.layers.ReLU()(h)
+        h = tf.nn.relu(h)
 
-        h = Pad([[0, 0], [1, 1], [1, 1], [0, 0]], mode='REFLECT')(h)
+        h = tf.pad(h, [[0, 0], [1, 1], [1, 1], [0, 0]], mode='REFLECT')
         h = keras.layers.Conv2D(dim, 3, padding='valid', use_bias=False)(h)
         h = Norm()(h)
 
@@ -57,17 +45,17 @@ def ResnetGenerator(input_shape=(256, 256, 3),
     h = inputs = keras.Input(shape=input_shape)
 
     # 1
-    h = Pad([[0, 0], [3, 3], [3, 3], [0, 0]], mode='REFLECT')(h)
+    h = tf.pad(h, [[0, 0], [3, 3], [3, 3], [0, 0]], mode='REFLECT')
     h = keras.layers.Conv2D(dim, 7, padding='valid', use_bias=False)(h)
     h = Norm()(h)
-    h = keras.layers.ReLU()(h)
+    h = tf.nn.relu(h)
 
     # 2
     for _ in range(n_downsamplings):
         dim *= 2
         h = keras.layers.Conv2D(dim, 3, strides=2, padding='same', use_bias=False)(h)
         h = Norm()(h)
-        h = keras.layers.ReLU()(h)
+        h = tf.nn.relu(h)
 
     # 3
     for _ in range(n_blocks):
@@ -78,12 +66,12 @@ def ResnetGenerator(input_shape=(256, 256, 3),
         dim //= 2
         h = keras.layers.Conv2DTranspose(dim, 3, strides=2, padding='same', use_bias=False)(h)
         h = Norm()(h)
-        h = keras.layers.ReLU()(h)
+        h = tf.nn.relu(h)
 
     # 5
-    h = Pad([[0, 0], [3, 3], [3, 3], [0, 0]], mode='REFLECT')(h)
+    h = tf.pad(h, [[0, 0], [3, 3], [3, 3], [0, 0]], mode='REFLECT')
     h = keras.layers.Conv2D(output_channels, 7, padding='valid')(h)
-    h = keras.layers.Activation('tanh')(h)
+    h = tf.tanh(h)
 
     return keras.Model(inputs=inputs, outputs=h)
 
@@ -100,19 +88,19 @@ def ConvDiscriminator(input_shape=(256, 256, 3),
 
     # 1
     h = keras.layers.Conv2D(dim, 4, strides=2, padding='same')(h)
-    h = keras.layers.LeakyReLU(alpha=0.2)(h)
+    h = tf.nn.leaky_relu(h, alpha=0.2)
 
     for _ in range(n_downsamplings - 1):
         dim = min(dim * 2, dim_ * 8)
         h = keras.layers.Conv2D(dim, 4, strides=2, padding='same', use_bias=False)(h)
         h = Norm()(h)
-        h = keras.layers.LeakyReLU(alpha=0.2)(h)
+        h = tf.nn.leaky_relu(h, alpha=0.2)
 
     # 2
     dim = min(dim * 2, dim_ * 8)
     h = keras.layers.Conv2D(dim, 4, strides=1, padding='same', use_bias=False)(h)
     h = Norm()(h)
-    h = keras.layers.LeakyReLU(alpha=0.2)(h)
+    h = tf.nn.leaky_relu(h, alpha=0.2)
 
     # 3
     h = keras.layers.Conv2D(1, 4, strides=1, padding='same')(h)
