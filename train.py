@@ -11,7 +11,7 @@ import tqdm
 
 import data
 import module
-
+import os
 
 # ==============================================================================
 # =                                   param                                    =
@@ -19,6 +19,11 @@ import module
 
 py.arg('--dataset', default='horse2zebra')
 py.arg('--datasets_dir', default='datasets')
+py.arg('--trainA') #'0tianA'
+py.arg('--trainB') #'0tianB'
+py.arg('--testA') #'0testA'
+py.arg('--testB') #'0testB'
+py.arg('--output_path')
 py.arg('--load_size', type=int, default=286)  # load image to this size
 py.arg('--crop_size', type=int, default=256)  # then crop to this size
 py.arg('--batch_size', type=int, default=1)
@@ -30,13 +35,15 @@ py.arg('--adversarial_loss_mode', default='lsgan', choices=['gan', 'hinge_v1', '
 py.arg('--gradient_penalty_mode', default='none', choices=['none', 'dragan', 'wgan-gp'])
 py.arg('--gradient_penalty_weight', type=float, default=10.0)
 py.arg('--cycle_loss_weight', type=float, default=10.0)
-py.arg('--identity_loss_weight', type=float, default=0.0)
+py.arg('--identity_loss_weight', type=float, default=0.1)
 py.arg('--pool_size', type=int, default=50)  # pool size to store fake samples
 args = py.args()
 
 # output_dir
-output_dir = py.join('output', args.dataset)
-py.mkdir(output_dir)
+output_dir = py.join(args.output_path, args.dataset)   #output_dir = py.join('output', args.dataset)
+if not os.path.exists(output_dir):
+    print('make output_dir path', output_dir)
+    py.mkdir(output_dir)
 
 # save settings
 py.args_to_yaml(py.join(output_dir, 'settings.yml'), args)
@@ -46,15 +53,15 @@ py.args_to_yaml(py.join(output_dir, 'settings.yml'), args)
 # =                                    data                                    =
 # ==============================================================================
 
-A_img_paths = py.glob(py.join(args.datasets_dir, args.dataset, 'trainA'), '*.jpg')
-B_img_paths = py.glob(py.join(args.datasets_dir, args.dataset, 'trainB'), '*.jpg')
+A_img_paths = py.glob(py.join(args.datasets_dir, args.dataset, args.trainA), '*.png')
+B_img_paths = py.glob(py.join(args.datasets_dir, args.dataset, args.trainB), '*.png')
 A_B_dataset, len_dataset = data.make_zip_dataset(A_img_paths, B_img_paths, args.batch_size, args.load_size, args.crop_size, training=True, repeat=False)
 
 A2B_pool = data.ItemPool(args.pool_size)
 B2A_pool = data.ItemPool(args.pool_size)
 
-A_img_paths_test = py.glob(py.join(args.datasets_dir, args.dataset, 'testA'), '*.jpg')
-B_img_paths_test = py.glob(py.join(args.datasets_dir, args.dataset, 'testB'), '*.jpg')
+A_img_paths_test = py.glob(py.join(args.datasets_dir, args.dataset, args.testA), '*.png')
+B_img_paths_test = py.glob(py.join(args.datasets_dir, args.dataset, args.testB), '*.png')
 A_B_dataset_test, _ = data.make_zip_dataset(A_img_paths_test, B_img_paths_test, args.batch_size, args.load_size, args.crop_size, training=False, repeat=True)
 
 
@@ -89,8 +96,6 @@ def train_G(A, B):
         B2A = G_B2A(B, training=True)
         A2B2A = G_B2A(A2B, training=True)
         B2A2B = G_A2B(B2A, training=True)
-        A2A = G_B2A(A, training=True)
-        B2B = G_A2B(B, training=True)
 
         A2B_d_logits = D_B(A2B, training=True)
         B2A_d_logits = D_A(B2A, training=True)
@@ -99,10 +104,10 @@ def train_G(A, B):
         B2A_g_loss = g_loss_fn(B2A_d_logits)
         A2B2A_cycle_loss = cycle_loss_fn(A, A2B2A)
         B2A2B_cycle_loss = cycle_loss_fn(B, B2A2B)
-        A2A_id_loss = identity_loss_fn(A, A2A)
-        B2B_id_loss = identity_loss_fn(B, B2B)
+        A2B_id_loss = identity_loss_fn(A, A2B)
+        B2A_id_loss = identity_loss_fn(B, B2A)
 
-        G_loss = (A2B_g_loss + B2A_g_loss) + (A2B2A_cycle_loss + B2A2B_cycle_loss) * args.cycle_loss_weight + (A2A_id_loss + B2B_id_loss) * args.identity_loss_weight
+        G_loss = (A2B_g_loss + B2A_g_loss) + (A2B2A_cycle_loss + B2A2B_cycle_loss) * args.cycle_loss_weight + (A2B_id_loss + B2A_id_loss) * args.identity_loss_weight
 
     G_grad = t.gradient(G_loss, G_A2B.trainable_variables + G_B2A.trainable_variables)
     G_optimizer.apply_gradients(zip(G_grad, G_A2B.trainable_variables + G_B2A.trainable_variables))
@@ -111,8 +116,8 @@ def train_G(A, B):
                       'B2A_g_loss': B2A_g_loss,
                       'A2B2A_cycle_loss': A2B2A_cycle_loss,
                       'B2A2B_cycle_loss': B2A2B_cycle_loss,
-                      'A2A_id_loss': A2A_id_loss,
-                      'B2B_id_loss': B2B_id_loss}
+                      'A2B_id_loss': A2B_id_loss,
+                      'B2A_id_loss': B2A_id_loss}
 
 
 @tf.function

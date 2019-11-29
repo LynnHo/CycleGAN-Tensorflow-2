@@ -1,17 +1,3 @@
-***Recommendation***
-
-- Our GAN based work for facial attribute editing - [AttGAN](https://github.com/LynnHo/AttGAN-Tensorflow).
-
-***New***
-
-- We re-implement CycleGAN by **Tensorflow 2**! The old versions are here: [v1](https://github.com/LynnHo/CycleGAN-Tensorflow-PyTorch/tree/v1), [v0](https://github.com/LynnHo/CycleGAN-Tensorflow-PyTorch/tree/v0).
-
-<hr style="height:1px" />
-
-<p align="center"> <img src="./pics/horse2zebra.gif" width="100%" /> </p>
-
-<hr style="height:1px" />
-
 # <p align="center"> CycleGAN - Tensorflow 2 </p>
 
 Tensorflow 2 implementation of CycleGAN.
@@ -44,32 +30,24 @@ row 1: apple -> orange -> reconstructed apple, row 2: orange -> apple -> reconst
 
 - Prerequisites
 
-    - Tensorflow 2.0 `pip install tensorflow-gpu`
+    - Tensorflow 2.0 Alpha `pip install tensorflow-gpu==2.0.0-alpha0`
     - Tensorflow Addons `pip install tensorflow-addons`
     - (if you meet "tf.summary.histogram fails with TypeError" `pip install --upgrade tb-nightly`)
     - scikit-image, oyaml, tqdm
     - Python 3.6
 
-- Dataset
+- Dataset   
+cycle-GAN need H&E and the IHC domains training set to train,so we set trainA is ki67 data, trainB is HE data, and sent them into network training at the same time.
 
-    - download the summer2winter dataset
-
-        ```console
-        sh ./download_dataset.sh summer2winter_yosemite
-        ```
-
-    - download the horse2zebra dataset
-
-        ```console
-        sh ./download_dataset.sh horse2zebra
-        ```
-
-    - see [download_dataset.sh](./download_dataset.sh) for more datasets
-
+| Date | wsi ID |Number of patches  |remark  |
+| --- | --- | --- | --- |
+| training_set |Total 19 wsi:'747672-1','721179-6','751086-3','745195-2','744059-3','749908-3','745514-2','748125-6','746836-3','746325-1','745262-3','750584-3','746074-2','749309-3','745586-4','745586-4','743947-2','742584-2','748259-3','724697-21'   |trainA_set(ki67 patches): 59738 trainB_set(HE patches): 55821 |no  |
+|test_set  |Total 1 wsi:'749320-4'|testA_set(ki67 patches): 1539 testB_set(HE patches): 1873  | no |
+    
 - Example of training
 
     ```console
-    CUDA_VISIBLE_DEVICES=0 python train.py --dataset summer2winter_yosemite
+    CUDA_VISIBLE_DEVICES=7 python ./train.py --dataset 'wsi_pair_patch' --datasets_dir '/mnt/share/gengxiaoqi/2cycleGAN/datasets' --trainA '1trainA' --trainB '1trainB' --testA '0testA' --testB '0testB' --output_path '/mnt/share/gengxiaoqi/2cycleGAN/output_test7' --load_size 512 --crop_size 512
     ```
 
     - tensorboard for loss visualization
@@ -81,5 +59,5 @@ row 1: apple -> orange -> reconstructed apple, row 2: orange -> apple -> reconst
 - Example of testing
 
     ```console
-    CUDA_VISIBLE_DEVICES=0 python test.py --experiment_dir ./output/summer2winter_yosemite
+    CUDA_VISIBLE_DEVICES=4,5 python ./test.py --experiment_dir '/mnt/share/gengxiaoqi/2cycleGAN/output_test2/wsi_pair_patch' --samples_testing 'samples_testing3' --testA '4testA' --testB '4testB' --load_size 512 --crop_size 512
     ```

@@ -11,8 +11,14 @@ import module
 # =                                   param                                    =
 # ==============================================================================
 
-py.arg('--experiment_dir')
+py.arg('--experiment_dir', default='/mnt/share/gengxiaoqi/2cycleGAN/output_test2/wsi_pair_patch')
+py.arg('--testA')
+py.arg('--testB')
+py.arg('--samples_testing')
+
 py.arg('--batch_size', type=int, default=32)
+py.arg('--load_size', type=int, default=1024)  # load image to this size     1024????
+py.arg('--crop_size', type=int, default=1024)  # then crop to this size      ????????
 test_args = py.args()
 args = py.args_from_yaml(py.join(test_args.experiment_dir, 'settings.yml'))
 args.__dict__.update(test_args.__dict__)
@@ -23,8 +29,8 @@ args.__dict__.update(test_args.__dict__)
 # ==============================================================================
 
 # data
-A_img_paths_test = py.glob(py.join(args.datasets_dir, args.dataset, 'testA'), '*.jpg')
-B_img_paths_test = py.glob(py.join(args.datasets_dir, args.dataset, 'testB'), '*.jpg')
+A_img_paths_test = py.glob(py.join(args.datasets_dir, args.dataset, args.testA), '*.png')
+B_img_paths_test = py.glob(py.join(args.datasets_dir, args.dataset, args.testB), '*.png')
 A_dataset_test = data.make_dataset(A_img_paths_test, args.batch_size, args.load_size, args.crop_size,
                                    training=False, drop_remainder=False, shuffle=False, repeat=1)
 B_dataset_test = data.make_dataset(B_img_paths_test, args.batch_size, args.load_size, args.crop_size,
@@ -53,7 +59,7 @@ def sample_B2A(B):
 
 
 # run
-save_dir = py.join(args.experiment_dir, 'samples_testing', 'A2B')
+save_dir = py.join(args.experiment_dir, args.samples_testing, 'A2B')
 py.mkdir(save_dir)
 i = 0
 for A in A_dataset_test:
@@ -63,7 +69,7 @@ for A in A_dataset_test:
         im.imwrite(img, py.join(save_dir, py.name_ext(A_img_paths_test[i])))
         i += 1
 
-save_dir = py.join(args.experiment_dir, 'samples_testing', 'B2A')
+save_dir = py.join(args.experiment_dir, args.samples_testing, 'B2A')
 py.mkdir(save_dir)
 i = 0
 for B in B_dataset_test:
