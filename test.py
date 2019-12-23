@@ -16,7 +16,7 @@ py.arg('--testA')
 py.arg('--testB')
 py.arg('--samples_testing')
 
-py.arg('--batch_size', type=int, default=32)
+py.arg('--batch_size', type=int, default=16)
 py.arg('--load_size', type=int, default=1024)  # load image to this size     1024????
 py.arg('--crop_size', type=int, default=1024)  # then crop to this size      ????????
 test_args = py.args()
@@ -29,8 +29,10 @@ args.__dict__.update(test_args.__dict__)
 # ==============================================================================
 
 # data
-A_img_paths_test = py.glob(py.join(args.datasets_dir, args.dataset, args.testA), '*.png')
-B_img_paths_test = py.glob(py.join(args.datasets_dir, args.dataset, args.testB), '*.png')
+A_img_paths_test = py.glob(py.join(args.datasets_dir, args.dataset, args.testA), '*.jpg')
+B_img_paths_test = py.glob(py.join(args.datasets_dir, args.dataset, args.testB), '*.jpg')
+#A_img_paths_test = py.glob(args.testA, '*.jpg')
+#B_img_paths_test = py.glob(args.testB, '*.jpg')
 A_dataset_test = data.make_dataset(A_img_paths_test, args.batch_size, args.load_size, args.crop_size,
                                    training=False, drop_remainder=False, shuffle=False, repeat=1)
 B_dataset_test = data.make_dataset(B_img_paths_test, args.batch_size, args.load_size, args.crop_size,
@@ -60,13 +62,17 @@ def sample_B2A(B):
 
 # run
 save_dir = py.join(args.experiment_dir, args.samples_testing, 'A2B')
+save_dir_A2B2A = py.join(args.experiment_dir, args.samples_testing, 'A2B2A')
 py.mkdir(save_dir)
+py.mkdir(save_dir_A2B2A)
 i = 0
 for A in A_dataset_test:
     A2B, A2B2A = sample_A2B(A)
+
     for A_i, A2B_i, A2B2A_i in zip(A, A2B, A2B2A):
         img = np.concatenate([A_i.numpy(), A2B_i.numpy(), A2B2A_i.numpy()], axis=1)
         im.imwrite(img, py.join(save_dir, py.name_ext(A_img_paths_test[i])))
+        im.imwrite(A2B2A_i.numpy(), py.join(save_dir_A2B2A, py.name_ext(A_img_paths_test[i])))
         i += 1
 
 save_dir = py.join(args.experiment_dir, args.samples_testing, 'B2A')
