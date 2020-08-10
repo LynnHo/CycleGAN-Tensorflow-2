@@ -46,18 +46,16 @@ row 1: apple -> orange -> reconstructed apple, row 2: orange -> apple -> reconst
 
     - Python 3.6
 
-    - TensorFlow 1.15
+    - TensorFlow 2.2, TensorFlow Addons 0.10.0
 
     - OpenCV, scikit-image, tqdm, oyaml
 
-    - *we recommend [Anaconda](https://www.anaconda.com/distribution/#download-section) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html#linux-installers), then you can create the AttGAN environment with commands below*
+    - *we recommend [Anaconda](https://www.anaconda.com/distribution/#download-section) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html#linux-installers), then you can create the TensorFlow 2.2 environment with commands below*
 
         ```console
-        conda create -n AttGAN python=3.6
+        conda create -n tensorflow-2.2 python=3.6
 
-        source activate AttGAN
-
-        conda install -c anaconda opencv
+        source activate tensorflow-2.2
 
         conda install -c anaconda scikit-image
 
@@ -65,7 +63,9 @@ row 1: apple -> orange -> reconstructed apple, row 2: orange -> apple -> reconst
 
         conda install -c conda-forge oyaml
 
-        conda install -c anaconda tensorflow-gpu=1.15
+        conda install -c anaconda tensorflow-gpu=2.2
+
+        pip install tensorflow-addons==0.10.0
         ```
 
 - Dataset
