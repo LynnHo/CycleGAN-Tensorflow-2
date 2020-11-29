@@ -2,7 +2,7 @@
 
 - Our GAN based work for facial attribute editing - [AttGAN](https://github.com/LynnHo/AttGAN-Tensorflow).
 
-***New***
+***News***
 
 - We re-implement CycleGAN by **Tensorflow 2**! The old versions are here: [v1](https://github.com/LynnHo/CycleGAN-Tensorflow-PyTorch/tree/v1), [v0](https://github.com/LynnHo/CycleGAN-Tensorflow-PyTorch/tree/v0).
 
@@ -66,6 +66,12 @@ row 1: apple -> orange -> reconstructed apple, row 2: orange -> apple -> reconst
         conda install -c anaconda tensorflow-gpu=2.2
 
         pip install tensorflow-addons==0.10.0
+        ```
+
+    - *NOTICE: if you create a new conda environment, remember to activate it before any other command*
+
+        ```console
+        source activate tensorflow-2.2
         ```
 
 - Dataset
