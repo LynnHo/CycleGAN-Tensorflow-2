@@ -57,13 +57,9 @@ row 1: apple -> orange -> reconstructed apple, row 2: orange -> apple -> reconst
 
         source activate tensorflow-2.2
 
-        conda install -c anaconda scikit-image
-
-        conda install -c anaconda tqdm
+        conda install scikit-image tqdm tensorflow-gpu=2.2
 
         conda install -c conda-forge oyaml
-
-        conda install -c anaconda tensorflow-gpu=2.2
 
         pip install tensorflow-addons==0.10.0
         ```
